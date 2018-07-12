@@ -2,6 +2,8 @@ package com.redis.demo.controllers;
 
 import com.redis.demo.vo.Article;
 
+import java.util.List;
+
 /**
  * @author LuZhiqing
  * @Description:
@@ -13,6 +15,14 @@ public class ArticleControllerImpl  implements ArticleController {
     }
 
     public String addArticle(Article article) {
+        return null;
+    }
+
+    public List<Article> getNewArticles() {
+        return null;
+    }
+
+    public List<Article> getHighScoreArt() {
         return null;
     }
 }
