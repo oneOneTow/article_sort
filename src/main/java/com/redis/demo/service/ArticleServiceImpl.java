@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author LuZhiqing
@@ -38,7 +35,7 @@ public class ArticleServiceImpl implements ArticleService{
             articleInfo=art.toString();
         }
         String [] info=articleInfo.split(":");
-        logger.info("ндуб╠Ю╨её╨{}",Integer.valueOf(info[1]));
+        logger.info("О©╫О©╫О©╫б╠О©╫еёО©╫{}",Integer.valueOf(info[1]));
         Integer artIdentity=Integer.valueOf(info[1])+1;
         Map<String,String> map=null;
         try{
@@ -50,6 +47,14 @@ public class ArticleServiceImpl implements ArticleService{
         redisClientTemplate.zadd(ARTICLE_TIME,0,artIdentity.toString());
         redisClientTemplate.zadd(ARTICLE_SCORE,0,artIdentity.toString());
         return null;
+    }
+    public List<String> getNewArticle(){
+        Set<String> articles=redisClientTemplate.zrange(ARTICLE_TIME,0,-1);
+        return new ArrayList<String>(articles);
+    }
+    public List<String> getHighScoreArt(){
+        Set<String> articles=redisClientTemplate.zrange(ARTICLE_SCORE,0,-1);
+        return new ArrayList<String>(articles);
     }
     public Map<String ,String> objectToMap(Object obj) throws Exception{
         Class clazz=obj.getClass();
