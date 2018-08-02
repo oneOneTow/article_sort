@@ -1,5 +1,6 @@
 package com.redis.demo.redisHelper;
 
+import org.springframework.stereotype.Component;
 import redis.clients.jedis.ShardedJedis;
 
 /**

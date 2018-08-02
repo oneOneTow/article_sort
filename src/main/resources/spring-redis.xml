@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="
             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -9,7 +9,7 @@
     <context:property-placeholder location="classpath:redis.properties" />
     <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
         <!-- 连接池中最大连接数。高版本：maxTotal，低版本：maxActive -->
-        <property name="maxTotal" value="${redis.maxTotal}" />
+        <property name="maxTotal" value="8" />
         <!-- 连接池中最大空闲的连接数. -->
         <property name="maxIdle" value="${redis.maxIdle}" />
         <!-- 连接池中最少空闲的连接数. -->
@@ -44,7 +44,7 @@
         </constructor-arg>
     </bean>
 
-    <bean id="redisDataSource" class="com.vens.redis.RedisDataSourceImpl" />
-    <bean id="redisClientTemplate" class="com.vens.redis.RedisClientTemplate" />
+    <bean id="redisDataSource" class="com.redis.demo.redisHelper.RedisDataSourceImpl" />
+    <bean id="redisClientTemplate" class="com.redis.demo.redisHelper.RedisClientTemplate" />
 
 </beans>

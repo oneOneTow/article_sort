@@ -5,6 +5,7 @@ import com.redis.demo.vo.Article;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -15,6 +16,7 @@ import java.util.*;
  * @Description:
  * @date 2018/7/12
  */
+@Component
 public class ArticleServiceImpl implements ArticleService{
     private static final String ARTICLE_TIME="time";
     private static final String ARTICLE_SCORE="score";
@@ -24,8 +26,8 @@ public class ArticleServiceImpl implements ArticleService{
 
     public String vote(Integer articleId) {
         String artIdentity="article:"+articleId;
-        return redisClientTemplate.hincrBy(artIdentity,"votes",1).toString();
-
+        String res = redisClientTemplate.hincrBy(artIdentity,"article",1).toString();
+        return res;
     }
 
     public String addArticle(Article article){
@@ -35,7 +37,7 @@ public class ArticleServiceImpl implements ArticleService{
             articleInfo=art.toString();
         }
         String [] info=articleInfo.split(":");
-        logger.info("���±�ţ�{}",Integer.valueOf(info[1]));
+        logger.info("文章号{}",Integer.valueOf(info[1]));
         Integer artIdentity=Integer.valueOf(info[1])+1;
         Map<String,String> map=null;
         try{
