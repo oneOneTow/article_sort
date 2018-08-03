@@ -1,5 +1,8 @@
 package com.redis.demo.service;
 
+import com.redis.demo.enums.ArticleEnum;
+import com.redis.demo.enums.CommonParams;
+import com.redis.demo.enums.RedisKeys;
 import com.redis.demo.redisHelper.RedisClientTemplate;
 import com.redis.demo.vo.Article;
 import org.slf4j.Logger;
@@ -18,15 +21,16 @@ import java.util.*;
  */
 @Component
 public class ArticleServiceImpl implements ArticleService{
+    Logger logger=LoggerFactory.getLogger(ArticleServiceImpl.class);
     private static final String ARTICLE_TIME="time";
     private static final String ARTICLE_SCORE="score";
-    Logger logger=LoggerFactory.getLogger(ArticleServiceImpl.class);
     @Autowired
     RedisClientTemplate redisClientTemplate;
 
     public String vote(Integer articleId) {
-        String artIdentity="article:"+articleId;
-        String res = redisClientTemplate.hincrBy(artIdentity,"article",1).toString();
+        String artIdentity=RedisKeys.ARTICLE +articleId;
+        String res = redisClientTemplate.hincrBy(artIdentity,ArticleEnum.VOTES,1).toString();
+        addScore(articleId);
         return res;
     }
 
@@ -58,6 +62,12 @@ public class ArticleServiceImpl implements ArticleService{
         Set<String> articles=redisClientTemplate.zrange(ARTICLE_SCORE,0,-1);
         return new ArrayList<String>(articles);
     }
+
+
+    public boolean exist(String Key) {
+        return false;
+    }
+
     public Map<String ,String> objectToMap(Object obj) throws Exception{
         Class clazz=obj.getClass();
         Field [] fields=clazz.getFields();
@@ -79,5 +89,14 @@ public class ArticleServiceImpl implements ArticleService{
     }
     public List<Article> getArticles(String flag){
         return null;
+    }
+
+    private double addScore(int articleId){
+        if(!exist(RedisKeys.ARTICLE_SCORE)){
+            String time=redisClientTemplate.hget(RedisKeys.ARTICLE+articleId,ArticleEnum.TIME);
+            double score=Double.valueOf(time)+ CommonParams.SCORE_BASE;
+            return redisClientTemplate.zadd(RedisKeys.ARTICLE_SCORE,score,String.valueOf(articleId));
+        }
+       return redisClientTemplate.zincrby(RedisKeys.ARTICLE_SCORE,CommonParams.SCORE_BASE,String.valueOf(articleId));
     }
 }

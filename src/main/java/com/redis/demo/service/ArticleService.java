@@ -15,4 +15,11 @@ public interface ArticleService {
      String addArticle(Article article);
      List<String> getNewArticle();
      List<String> getHighScoreArt();
+
+     /**
+      * 判断一篇文章是否存在
+      * @param articleId
+      * @return
+      */
+     boolean exist(String articleId);
 }
